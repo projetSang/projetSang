@@ -27,12 +27,6 @@ const steps = [
   },
 ];
 
-const stats = [
-  { value: "8", label: "Groupes sanguins" },
-  { value: "24/7", label: "Accès continu" },
-  { value: "100%", label: "Données sécurisées" },
-  { value: "< 1min", label: "Recherche de donneurs" },
-];
 
 const features = [
   {
@@ -67,7 +61,25 @@ const features = [
   },
 ];
 
+import { useState, useEffect } from "react";
+
 export default function Index() {
+  const [statsData, setStatsData] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("/api/hospital/stats")
+      .then(res => res.json())
+      .then(data => setStatsData(data))
+      .catch(console.error);
+  }, []);
+
+  const stats = [
+    { value: statsData?.donors_region || "8", label: "Donneurs inscrits" },
+    { value: "24/7", label: "Accès continu" },
+    { value: statsData?.alerts || "0", label: "Alertes en cours" },
+    { value: statsData?.patients || "0", label: "Patients suivis" },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -138,7 +150,7 @@ export default function Index() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 md:py-24 bg-muted/30">
+      <section id="features" className="py-16 md:py-24 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Nos Fonctionnalités</h2>

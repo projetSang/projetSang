@@ -2,12 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 
-class Hospital extends Model
+class Hospital extends Authenticatable
 {
+    use HasApiTokens, Notifiable;
+
     protected $fillable = ['name', 'city', 'email', 'password'];
     
+    protected $hidden = [
+        'password',
+    ];
+
     public function patients() {
         return $this->hasMany(Patient::class);
     }

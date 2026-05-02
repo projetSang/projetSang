@@ -29,7 +29,7 @@ export default function HospitalDashboard() {
   const [statsData, setStatsData] = useState<any>(null);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/hospital/stats")
+    fetch("/api/hospital/stats")
       .then(res => res.json())
       .then(data => setStatsData(data))
       .catch(err => console.error("Erreur de récupération des statistiques backend", err));

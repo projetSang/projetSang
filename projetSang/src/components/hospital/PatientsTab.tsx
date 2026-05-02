@@ -46,7 +46,7 @@ export function PatientsTab({ showAddPatient, setShowAddPatient }: any) {
 
   const handleAddPatient = async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/hospital/patients", {
+      const res = await fetch("/api/hospital/patients", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -67,7 +67,7 @@ export function PatientsTab({ showAddPatient, setShowAddPatient }: any) {
   };
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/hospital/patients")
+    fetch("/api/hospital/patients")
       .then(res => res.json())
       .then(data => setPatients(data))
       .catch(console.error);

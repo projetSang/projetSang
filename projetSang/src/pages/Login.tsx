@@ -8,15 +8,39 @@ import { Mail, Lock, Eye, EyeOff, Droplets } from "lucide-react";
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    localStorage.setItem("isAuthenticated", "true");
-    if (email.toLowerCase().includes("hopital") || email.toLowerCase().includes("chu")) {
-      navigate('/hospital');
-    } else {
-      navigate('/patient');
+    setError("");
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();  
+      if (res.ok) {
+        localStorage.setItem("isAuthenticated", "true");
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userType", data.type);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        
+        if (data.type === 'hospital') {
+          navigate('/hospital');
+        } else {
+          navigate('/patient');
+        }
+      } else {
+        setError(data.message || "Identifiants incorrects");
+      }
+    } catch (err) {
+      setError("Erreur de connexion au serveur");
     }
   };
 
@@ -39,6 +63,7 @@ export default function Login() {
         <div className="w-full bg-white rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-slate-100 p-8 md:p-12 space-y-8">
 
           <form className="space-y-6" onSubmit={handleLogin}>
+            {error && <div className="text-destructive text-sm text-center bg-destructive/10 p-2 rounded-lg">{error}</div>}
             <div className="space-y-2">
              <Label htmlFor="email font-bold" title="email" className="text-slate-900 font-bold">Email</Label>
                 <Input 
@@ -59,6 +84,8 @@ export default function Login() {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="Mot De Passe"
                   className="h-12 rounded-xl border-slate-200 focus:border-primary transition-all px-6 text-base pr-14"
                 />

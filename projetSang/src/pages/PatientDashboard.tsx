@@ -21,18 +21,19 @@ const mockDocuments = [
 const tabs = [
   { id: "profile", label: "Mon profil", icon: User },
   { id: "medical", label: "Dossier médical", icon: FileText },
-  { id: "documents", label: "Documents", icon: Download },
-  { id: "share", label: "Partage", icon: Share2 },
+  { id: "documents", label: "Documents & Partage", icon: Download },
   { id: "notifications", label: "Notifications", icon: Bell },
 ];
 
 export default function PatientDashboard() {
   const [activeTab, setActiveTab] = useState("profile");
   const [shareLink] = useState("https://sangvital.ma/dossier/abc123xyz");
+  const userString = localStorage.getItem("user");
+  const user = userString && userString !== "undefined" ? JSON.parse(userString) : { name: "Aya Asrir", email: "aya@email.com" };
 
   return (
     <div className="min-h-screen bg-muted/30 pt-18 md:pt-16">
-      <Navbar user={{ name: "Aya Asrir" }} />
+      <Navbar user={{ name: user.name }} />
 
       <div className="container mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
         {/* Sidebar */}
@@ -71,11 +72,11 @@ export default function PatientDashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="text-sm font-medium text-muted-foreground">Nom complet</label>
-                    <Input defaultValue="Aya Asrir" className="mt-1" />
+                    <Input defaultValue={user.name} className="mt-1" />
                   </div>
                   <div>
                     <label className="text-sm font-medium text-muted-foreground">Email</label>
-                    <Input defaultValue="aya@email.com" className="mt-1" />
+                    <Input defaultValue={user.email} className="mt-1" />
                   </div>
                   <div>
                     <label className="text-sm font-medium text-muted-foreground">Téléphone</label>
@@ -194,36 +195,33 @@ export default function PatientDashboard() {
                   </div>
                 ))}
               </div>
-            </div>
-          )}
-
-          {activeTab === "share" && (
-            <div className="space-y-6">
-              <h2 className="text-xl font-bold">Partager mon dossier</h2>
-              <div className="bg-card rounded-xl border border-border p-6 space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Générez un lien sécurisé pour permettre à votre médecin de consulter votre dossier en lecture seule.
-                </p>
-                <div className="flex gap-2">
-                  <Input value={shareLink} readOnly className="flex-1 font-mono text-xs" />
-                  <Button variant="outline" size="icon">
-                    <Copy className="h-4 w-4" />
-                  </Button>
-                </div>
-                <div className="flex gap-3">
-                  <Button variant="hero" size="sm">
-                    <RefreshCw className="h-4 w-4 mr-2" />
-                    Régénérer le lien
-                  </Button>
-                  <Button variant="outline" size="sm" className="text-destructive">
-                    Désactiver le lien
-                  </Button>
-                </div>
-                <div className="bg-muted rounded-lg p-4 text-sm">
-                  <div className="font-medium mb-1">Paramètres du lien</div>
-                  <div className="text-muted-foreground">Durée de validité : 30 jours</div>
-                  <div className="text-muted-foreground">Accès : Lecture seule</div>
-                  <div className="text-muted-foreground">Statut : Actif</div>
+              <div className="pt-8 border-t border-border mt-8">
+                <h2 className="text-xl font-bold mb-4">Partager mon dossier</h2>
+                <div className="bg-card rounded-xl border border-border p-6 space-y-4">
+                  <p className="text-sm text-muted-foreground">
+                    Générez un lien sécurisé pour permettre à votre médecin de consulter votre dossier en lecture seule.
+                  </p>
+                  <div className="flex gap-2">
+                    <Input value={shareLink} readOnly className="flex-1 font-mono text-xs" />
+                    <Button variant="outline" size="icon">
+                      <Copy className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <div className="flex gap-3">
+                    <Button variant="hero" size="sm">
+                      <RefreshCw className="h-4 w-4 mr-2" />
+                      Régénérer le lien
+                    </Button>
+                    <Button variant="outline" size="sm" className="text-destructive">
+                      Désactiver le lien
+                    </Button>
+                  </div>
+                  <div className="bg-muted rounded-lg p-4 text-sm">
+                    <div className="font-medium mb-1">Paramètres du lien</div>
+                    <div className="text-muted-foreground">Durée de validité : 30 jours</div>
+                    <div className="text-muted-foreground">Accès : Lecture seule</div>
+                    <div className="text-muted-foreground">Statut : Actif</div>
+                  </div>
                 </div>
               </div>
             </div>

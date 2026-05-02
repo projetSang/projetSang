@@ -12,7 +12,7 @@ export function SearchTab({ selectedBlood, setSelectedBlood, city, setCity }: an
   const [donors, setDonors] = useState<any[]>([]);
 
   const handleSearch = () => {
-    fetch(`http://localhost:8000/api/hospital/search-donors?blood_type=${encodeURIComponent(selectedBlood)}&city=${encodeURIComponent(city)}`)
+    fetch(`/api/hospital/search-donors?blood_type=${encodeURIComponent(selectedBlood)}&city=${encodeURIComponent(city)}`)
       .then(res => res.json())
       .then(data => setDonors(data))
       .catch(console.error);

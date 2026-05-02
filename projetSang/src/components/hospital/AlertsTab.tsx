@@ -9,11 +9,37 @@ export function AlertsTab({ showNewAlert, setShowNewAlert }: any) {
   const [alerts, setAlerts] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/hospital/alerts")
+    fetch("/api/hospital/alerts")
       .then(res => res.json())
       .then(data => setAlerts(data))
       .catch(console.error);
   }, []);
+
+  const [alertForm, setAlertForm] = useState({
+    blood_type: "O+",
+    urgency_level: "Haute",
+    quantity: ""
+  });
+
+  const handleCreateAlert = async () => {
+    try {
+      const res = await fetch("/api/hospital/alerts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...alertForm,
+          hospital_id: 1 // default
+        })
+      });
+      if (res.ok) {
+        const newAlert = await res.json();
+        setAlerts(prev => [newAlert, ...prev]);
+        setShowNewAlert(false);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div className="space-y-6 animate-reveal">
@@ -40,36 +66,39 @@ export function AlertsTab({ showNewAlert, setShowNewAlert }: any) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
             <div>
               <label className="text-sm font-medium text-slate-800">Groupes Sanguins Requis</label>
-              <select className="mt-1 h-11 w-full rounded-lg border border-input bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-destructive/20 outline-none">
-                <option>O− Uniquement (Urgence absolue)</option>
-                <option>O+, O−</option>
-                <option>Tous groupes</option>
-                {bloodGroups.map((g) => <option key={g}>{g}</option>)}
+              <select 
+                className="mt-1 h-11 w-full rounded-lg border border-input bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-destructive/20 outline-none"
+                value={alertForm.blood_type}
+                onChange={(e) => setAlertForm({...alertForm, blood_type: e.target.value})}
+              >
+                {bloodGroups.map((g) => <option key={g} value={g}>{g}</option>)}
               </select>
             </div>
             <div>
               <label className="text-sm font-medium text-slate-800">Quantité (Poches)</label>
-              <Input placeholder="Ex: 5" className="mt-1 h-11 rounded-lg border-input bg-white" />
+              <Input 
+                placeholder="Ex: 5" 
+                className="mt-1 h-11 rounded-lg border-input bg-white" 
+                value={alertForm.quantity}
+                onChange={(e) => setAlertForm({...alertForm, quantity: e.target.value})}
+              />
             </div>
             <div>
               <label className="text-sm font-medium text-slate-800">Niveau d'urgence</label>
-              <select className="mt-1 h-11 w-full rounded-lg border border-input bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-destructive/20 outline-none">
-                <option value="critique">Critique (&lt; 2 heures)</option>
-                <option value="haute">Haute (Aujourd'hui)</option>
-                <option value="moyenne">Moyenne (Cette semaine)</option>
+              <select 
+                className="mt-1 h-11 w-full rounded-lg border border-input bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-destructive/20 outline-none"
+                value={alertForm.urgency_level}
+                onChange={(e) => setAlertForm({...alertForm, urgency_level: e.target.value})}
+              >
+                <option value="Critique">Critique (&lt; 2 heures)</option>
+                <option value="Haute">Haute (Aujourd'hui)</option>
+                <option value="Moyenne">Moyenne (Cette semaine)</option>
               </select>
-            </div>
-            <div className="md:col-span-3">
-              <label className="text-sm font-medium text-slate-800">Informations complémentaires</label>
-              <textarea 
-                className="mt-1 flex w-full rounded-lg border border-input bg-white px-3 py-3 text-sm min-h-[80px] focus:ring-2 focus:ring-destructive/20 outline-none resize-none" 
-                placeholder="Précisez le service (ex: Réanimation), des instructions pour l'accès, ou un numéro direct..." 
-              />
             </div>
           </div>
           <div className="flex justify-end gap-3 pt-2 border-t border-destructive/10">
             <Button variant="outline" size="sm" onClick={() => setShowNewAlert(false)}>Annuler</Button>
-            <Button variant="destructive" size="sm" onClick={() => setShowNewAlert(false)} className="shadow-lg shadow-destructive/20">
+            <Button variant="destructive" size="sm" onClick={handleCreateAlert} className="shadow-lg shadow-destructive/20">
               <Bell className="h-4 w-4 mr-2" />
               Diffuser l'alerte locale
             </Button>

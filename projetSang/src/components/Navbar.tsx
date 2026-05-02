@@ -72,7 +72,7 @@ export function Navbar({ user }: NavbarProps) {
             <div className="flex items-center gap-3 text-white">
               <span className="text-sm font-bold hidden sm:block">{user.name}</span>
               <div className="h-8 w-8 rounded-full bg-white text-primary flex items-center justify-center text-xs font-black shadow-lg">
-                {user.name.charAt(0)}
+                  {user.name?.charAt(0) || "U"}
               </div>
               <Button 
                 variant="ghost" 
@@ -115,7 +115,7 @@ export function Navbar({ user }: NavbarProps) {
             <div className="flex flex-col items-center gap-4 w-full pt-4">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-full hero-gradient text-white flex items-center justify-center text-lg font-bold">
-                  {user.name.charAt(0)}
+                    {user.name?.charAt(0) || "U"}
                 </div>
                 <span className="font-bold text-slate-900">{user.name}</span>
               </div>
