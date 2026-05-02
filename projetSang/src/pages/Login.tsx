@@ -77,12 +77,7 @@ export default function Login() {
             </Button>
           </form>
 
-          <div className="text-center space-y-4 pt-4">
-            <b>Pas encore de compte ? </b>
-            <Link to="/register" className="text-primary font-black hover:underline tracking-tight">
-               S'inscrire
-            </Link>
-          </div>
+
         </div>
        
       </div>

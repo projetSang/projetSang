@@ -87,9 +87,9 @@ export default function Index() {
             Sauvegardez votre groupe sanguin et vos informations médicales. Partagez-les facilement avec vos médecins et aidez les hôpitaux à trouver des donneurs en urgence.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/register">
+            <Link to="/contact">
               <Button variant="hero" size="lg" className="text-base px-8">
-                Créer mon dossier médical
+                Nous contacter
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
@@ -173,10 +173,10 @@ export default function Index() {
             Accédez à une base de données de donneurs classés par groupe sanguin et proximité. Trouvez des donneurs compatibles en quelques secondes.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/register">
+            <Link to="/contact">
               <Button size="lg" className="bg-white text-primary hover:bg-white/90 font-semibold text-base px-8">
                 <MapPin className="mr-2 h-5 w-5" />
-                Créer un compte hôpital
+                Se renseigner (Hôpitaux)
               </Button>
             </Link>
             <Link to="/contact">

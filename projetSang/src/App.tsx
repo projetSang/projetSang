@@ -5,12 +5,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import Login from "./pages/Login.tsx";
-import Register from "./pages/Register.tsx";
 import Contact from "./pages/Contact.tsx";
 import PatientDashboard from "./pages/PatientDashboard.tsx";
 import HospitalDashboard from "./pages/HospitalDashboard.tsx";
-import MedicalPassport from "./pages/MedicalPassport.jsx";
-import NotFound from "./pages/NotFound.tsx";
+
 
 const queryClient = new QueryClient();
 
@@ -29,7 +27,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+
           <Route 
             path="/patient" 
             element={
@@ -46,8 +44,8 @@ const App = () => (
               </ProtectedRoute>
             } 
           />
-          <Route path="/medical-passport" element={<MedicalPassport />} />
-          <Route path="*" element={<NotFound />} />
+
+
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
